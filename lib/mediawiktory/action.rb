@@ -4,10 +4,10 @@ require 'hashie'
 module MediaWiktory
   class Action < MWModule
     attr_reader :client
-    
-    def initialize(client, **values)
+
+    def initialize(client, values = {})
       @client = client
-      super(**values)
+      super(values)
     end
 
     # FIXME: should be initialize_copy

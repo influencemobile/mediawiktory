@@ -17,8 +17,8 @@ module MediaWiktory
     end
 
     attr_reader :url
-    
-    def initialize(url, **options)
+
+    def initialize(url, options = {})
       @url = Addressable::URI.parse(url)
       @faraday = Faraday.new(url) do |f|
         f.request :url_encoded

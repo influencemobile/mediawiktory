@@ -2,7 +2,7 @@ module MediaWiktory
   module Params
     class Param
       attr_reader :name, :value
-      
+
       def initialize(name, value = nil)
         @name = name
         self.value = value if value
@@ -14,7 +14,7 @@ module MediaWiktory
 
         @value = val
       end
-      
+
       def to_param(prefix = nil)
         {"#{prefix}#{name}" => value_to_param}
       end
@@ -31,7 +31,7 @@ module MediaWiktory
         self.class.valid?(val)
       end
     end
-    
+
     class String < Param
       def self.valid?(val)
         val.kind_of?(::String)
@@ -130,7 +130,7 @@ module MediaWiktory
 
         attr_accessor :allowed_values
       end
-      
+
       def value=(val)
         super(val && MWModule.coerce(val))
       end
@@ -214,7 +214,7 @@ module MediaWiktory
       def list
         @list ||= {}
       end
-      
+
       def symbol(sym = nil)
         return @symbol unless sym
         @symbol = sym
@@ -232,7 +232,7 @@ module MediaWiktory
           MWModule.list.key?(value) or
             fail(ArgumentError, "Unsupported module: #{value} for #{self}")
           MWModule.list[value].new
-          
+
         when Hash
           value.count == 1 or
             fail(ArgumentError, "Too many values for module initialization")
@@ -258,11 +258,11 @@ module MediaWiktory
 
       def param(name, type)
         params[name] = type
-        
+
         define_method(name){|*arg|
           return param(name).value if arg.empty?
-          
-          dup.tap{|dup| 
+
+          dup.tap{|dup|
             case
             when type.ancestors.include?(Params::List) ||
                  type.ancestors.include?(Params::Modules)
@@ -283,13 +283,13 @@ module MediaWiktory
       end
     end
 
-    def initialize(**values)
+    def initialize(values = {})
       @params = Hash.new{|h, name|
         self.class.params.key?(name) or
           fail(ArgumentError, "Unknown param: #{name} for #{self}")
         h[name] = self.class.params[name].new(name)
       }
-      
+
       values.each do |k, v|
         set(k, v)
       end
